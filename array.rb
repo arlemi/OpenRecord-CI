@@ -11,10 +11,13 @@ class Array
     nil
   end
 
-  def method_missing( id, *args, &block )
-    nom_methode = "#{id}"
-
-
-    raise NoMethodError, "Methode non-definie `#{id}' pour #{self}", caller(1)
+  def method_missing( id, *args )
+        if id.to_s =~/=$/              
+                newId = id.to_s.chop
+                definir_reader_et_writer(newId.to_sym)
+                instance_eval "@#{newId} = args[0]"
+        else
+                raise NoMethodError
+        end
   end
 end
